@@ -3,6 +3,8 @@ var request = require('request');
 var path = require('path');
 const fileupload = require('express-fileupload');
 const { exec } = require('child_process');
+const Viz = require('viz.js');
+const { Module, render } = require('viz.js/full.render.js');
 
 var app = express();
 
@@ -10,6 +12,7 @@ var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(fileupload());
+var viz = new Viz({Module, render});
 
 app.get('/', function(req,res){
     res.sendFile(path.join(__dirname+'/home.html'));
@@ -42,9 +45,16 @@ app.post('/result', function(req, res){
             console.log(`stderr: ${stderr}`);
             return;
         }
-        var dotInput = stdout;
-
-        res.sendFile(path.join(__dirname+'/HIN.svg'));
+        
+        let dotInput = stdout;
+        
+        viz.renderString(dotInput, {engine: 'fdp'})
+        .then(function(element){
+            console.log(element);
+            res.send(element);
+        }).catch(error => {
+            console.log(error);
+        });
     });
 });
 
