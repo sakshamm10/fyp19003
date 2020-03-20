@@ -17,9 +17,6 @@
 		</nav>
 		<div style="margin-left: 100px;">
 			<p>Please choose a valid file type (eg: .nt)</p>
-			<input type="file" id="myFile">
-			<br><br>
-			<button onclick="window.location.href = '/result';">Upload</button>
 			<form action="/result" method="POST" encType="multipart/form-data">
 				<input type="file" name="inputNT" id="inputFile">
 				<input type="submit" value="Submit">
