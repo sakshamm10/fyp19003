@@ -5,6 +5,7 @@ const fileupload = require('express-fileupload');
 const { exec } = require('child_process');
 const Viz = require('viz.js');
 const { Module, render } = require('viz.js/full.render.js');
+var fs = require('fs');
 
 var app = express();
 
@@ -36,7 +37,7 @@ app.post('/result', function(req, res){
         }
     });
 
-    exec("php NT2Dot.php NTinput.nt", (error, stdout, stderr) => {
+    exec("php NT2Dot.php NTinput.nt", {maxBuffer: 1000 * 1024}, (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             return;
@@ -47,6 +48,11 @@ app.post('/result', function(req, res){
         }
         
         let dotInput = stdout;
+        
+        fs.writeFile('dot_input.txt', dotInput, (err) => {
+            if (err) throw err;
+            console.log('Saved!');
+        });
         
         viz.renderString(dotInput, {engine: 'fdp'})
         .then(function(element){
