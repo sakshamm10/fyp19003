@@ -1,0 +1,26 @@
+<html>
+<head>
+  <title>HIN</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div style="padding-top: 50px; padding-bottom: 50px;">
+    <img src="network-icon-png-4.png" style="width:120px;height:120px;">
+  </div>
+  <div style="font-size: xx-large; padding-bottom: 35px; font-weight: bold;">HIN Visualization Portal</div>
+  <div style="margin-top:0px;">
+			<div class="container" style="background-color: #8bd1d1; margin-left: 500px; margin-right: 500px; padding: 50px;">	
+		<div>
+			<div style="font-size: x-large; padding-bottom: 60px;">Please upload a .nt (N-Triple) file below</div>
+      <form action="/result" method="POST" encType="multipart/form-data">
+        <input class ="btn" type="file" name="inputNT" id="inputFile">
+        <br> <br> <br> <br> <br>
+        <button class="btn">Visualize it!</button>
+				<!-- <input type="submit" value="Submit"> -->
+			</form>
+    </div>
+  </div>
+  </div>
+</body>
+</html>

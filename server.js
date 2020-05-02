@@ -5,7 +5,6 @@ const fileupload = require('express-fileupload');
 const { exec } = require('child_process');
 const Viz = require('viz.js');
 const { Module, render } = require('viz.js/full.render.js');
-var fs = require('fs');
 
 var app = express();
 
@@ -13,10 +12,11 @@ var bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(fileupload());
+app.use(express.static(__dirname + '/'));
 var viz = new Viz({Module, render});
 
 app.get('/', function(req,res){
-    res.sendFile(path.join(__dirname+'/home.html'));
+    res.sendFile(path.join(__dirname+'/index.html'));
 });
 
 app.post('/result', function(req, res){
@@ -37,7 +37,7 @@ app.post('/result', function(req, res){
         }
     });
 
-    exec("php NT2Dot.php NTinput.nt", {maxBuffer: 1000 * 1024}, (error, stdout, stderr) => {
+    exec("php NT2Dot.php NTinput.nt", (error, stdout, stderr) => {
         if (error) {
             console.log(`error: ${error.message}`);
             return;
@@ -48,11 +48,6 @@ app.post('/result', function(req, res){
         }
         
         let dotInput = stdout;
-        
-        fs.writeFile('dot_input.txt', dotInput, (err) => {
-            if (err) throw err;
-            console.log('Saved!');
-        });
         
         viz.renderString(dotInput, {engine: 'fdp'})
         .then(function(element){
